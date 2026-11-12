@@ -60,7 +60,7 @@ async function getGuests() {
 /** Add new Party */
 async function addParty(party) {
   try {
-    await fetch(API, {
+    await fetch(API + "/events", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -77,7 +77,7 @@ async function addParty(party) {
 
 async function removeParty(id) {
   try {
-    await fetch(API + "/" + id, {
+    await fetch(API + "/events/" + id, {
       method: "DELETE",
     });
     selectedParty = undefined;
@@ -174,7 +174,7 @@ function NewPartyForm() {
     </label>
     <label>
       Date
-      <input type="date" required />
+      <input name="date" type="date" required />
     </label>
     <label>
       Location
@@ -188,11 +188,12 @@ function NewPartyForm() {
     event.preventDefault();
 
     const data = new FormData($form);
+    const date = new Date(data.get("date")).toISOString();
 
     addParty({
       name: data.get("name"),
       description: data.get("description"),
-      date: data.get("date"),
+      date,
       location: data.get("location"),
     });
   });
